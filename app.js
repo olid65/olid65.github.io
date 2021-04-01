@@ -42,26 +42,34 @@ function fetchJsonInfos(){
 
         shuffle(listPlantes)
         nbPlants = listPlantes.length
-        nextPlant()
+        nextPlant(keep = false)
         
 
     })
 
     btnNext.addEventListener('click', nextPlant)
     btnNextKeep.addEventListener('click',()=>{
-        listPlantes.push(nom)
-        shuffle(listPlantes)
-        nextPlant()
+        
+        nextPlant(keep = true)
     })
     
-    //click sur image
+    
     for(let i=0;i<imgs.length;i++){
-        
+        //click sur image on afiche ou on passe à la suivante sans conserver l'actuelle
         imgs[i].addEventListener('click',()=>{
             if(solution.style.display ==='none'){
                 solution.style.display = 'block'
             }else{
-                nextPlant()
+                nextPlant(keep = false)
+            }
+        })
+        //double click sur image on afiche ou on passe à la suivante en conservant l'actuelle
+        imgs[i].addEventListener('dblclick',()=>{
+            if(solution.style.display ==='none'){
+                solution.style.display = 'block'
+            }else{
+                listPlantes.push(nom)
+                nextPlant(keep = true)
             }
         })
     }
@@ -82,7 +90,11 @@ function fetchJsonInfos(){
 
 fetchJsonInfos()
 
-function nextPlant(){
+function nextPlant(keep = false){
+    if(keep===true){
+        listPlantes.push(nom)
+        shuffle(listPlantes)
+    }
     counter.innerText=`${listPlantes.length}/${nbPlants}`
     solution.style.display='none' 
     nom = listPlantes.pop()
